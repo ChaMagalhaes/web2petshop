@@ -15,6 +15,12 @@ public class Pet {
     @Column(name = "raca", nullable = false)
     private String raca;
 
+    @Column(name = "idade", nullable = false)
+    private int idade;
+
+    @Column(name = "tamanho", nullable = false)
+    private String tamanho;
+
     public long getId() {
         return id;
     }
@@ -37,5 +43,21 @@ public class Pet {
 
     public void setRaca(String raca) {
         this.raca = raca;
+    }
+
+    public int getIdade() {
+        return idade;
+    }
+
+    public void setIdade(int idade) {
+        this.idade = idade;
+    }
+
+    public String getTamanho() {
+        return tamanho;
+    }
+
+    public void setTamanho(String tamanho) {
+        this.tamanho = tamanho;
     }
 }

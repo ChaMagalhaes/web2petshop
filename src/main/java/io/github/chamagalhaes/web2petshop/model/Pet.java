@@ -12,7 +12,7 @@ public class Pet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Size(min = 3, max = 80,
             message = "Nome deve conter entre 3 e 80 caracteres")

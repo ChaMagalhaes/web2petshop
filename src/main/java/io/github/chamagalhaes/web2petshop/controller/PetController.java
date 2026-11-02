@@ -29,7 +29,7 @@ public class PetController {
     @GetMapping("/pet/criar")
     public String criarPet(Model model) {
         model.addAttribute("pet", new Pet());
-        return "pet/criar";
+        return "pet/form";
     }
 
     @PostMapping("/pet/salvar")
@@ -39,7 +39,7 @@ public class PetController {
 
         if(result.hasErrors()) {
             model.addAttribute("pet", pet);
-            return "pet/criar";
+            return "pet/form";
         }
 
         petService.savePet(pet);
@@ -56,6 +56,6 @@ public class PetController {
     public String editarPet(@PathVariable("id") Long id, Model model) {
         Pet pet = petService.getPetById(id);
         model.addAttribute("pet", pet);
-        return "pet/editar";
+        return "pet/form";
     }
 }

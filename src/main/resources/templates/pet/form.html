@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 
-<th:block th:replace="~{fragments/head :: head('Editar Pet')}"></th:block>
+<th:block th:replace="~{fragments/head :: head('Cadastrar Pet')}"></th:block>
 <body>
 <th:block th:replace="~{fragments/head :: header()}"></th:block>
 <div class="container pt-5">
-    <h1>Editar Pet</h1>
+    <h1 th:text="${pet.id == null} ? 'Cadastrar Pet' : 'Editar Pet'">
+        Cadastrar Pet
+    </h1>
 
     <form action="#" th:action="@{/pet/salvar}" th:object="${pet}" method="POST">
 
@@ -34,13 +36,13 @@
             <label class="col-sm-2 col-form-label" for="raca">Raca:</label>
             <div class="col-sm-10">
                 <input
-                        type="text"
-                        th:field="*{raca}"
-                        class="form-control"
-                        id="raca"
-                        name="raca"
-                        placeholder="Digite a raca do pet"
-                        required
+                    type="text"
+                    th:field="*{raca}"
+                    class="form-control"
+                    id="raca"
+                    name="raca"
+                    placeholder="Digite a raca do pet"
+                    required
                 >
                 <p th:if="${#fields.hasErrors('raca')}" th:errorclass="text-danger" th:errors="*{raca}"></p>
             </div>
@@ -83,9 +85,12 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-info col-2">
-            Atualizar Pet
+        <button type="submit"
+                class="btn btn-primary"
+                th:text="${pet.id == null} ? 'Cadastrar Pet' : 'Editar Pet'">
+            Cadastrar Pet
         </button>
+
     </form>
 </div>
 <th:block th:replace="~{fragments/footer :: footer()}"></th:block>

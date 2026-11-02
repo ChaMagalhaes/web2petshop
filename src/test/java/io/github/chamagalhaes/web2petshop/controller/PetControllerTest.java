@@ -1,3 +1,4 @@
+
 package io.github.chamagalhaes.web2petshop.controller;
 
 import io.github.chamagalhaes.web2petshop.config.SecurityConfig;
@@ -26,7 +27,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
-
 
 @WebMvcTest(PetController.class)
 @Import({TestConfig.class, SecurityConfig.class})
@@ -65,7 +65,8 @@ public class PetControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(username = "user@web2petshop.com",
+            authorities = {"USER"})
     @DisplayName("GET /pet - Lista pets para usuário autenticado")
     void testIndexAuthenticatedUser() throws Exception {
 
@@ -86,10 +87,9 @@ public class PetControllerTest {
 
         mockMvc.perform(get("/pet/criar"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("pet/criar"))
+                .andExpect(view().name("pet/form"))
                 .andExpect(model().attributeExists("pet"));
     }
-
 
     @Test
     @WithMockUser(username = "user@web2petshop.com",
@@ -119,6 +119,21 @@ public class PetControllerTest {
     @Test
     @WithMockUser(username = "admin@web2petshop.com",
             authorities = {"ADMIN"})
+    @DisplayName("GET /pet - ADMIN visualiza botão de cadastrar")
+    void testCreateButtonVisibleToAdmin() throws Exception {
+
+        when(petService.getAllPet()).thenReturn(testCreatePetList());
+
+        mockMvc.perform(get("/pet"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("Cadastrar Pet")
+                ));
+    }
+
+    @Test
+    @WithMockUser(username = "admin@web2petshop.com",
+            authorities = {"ADMIN"})
     @DisplayName("POST /pet/salvar - Falha na validação")
     void testSavePetValidationError() throws Exception {
 
@@ -128,7 +143,7 @@ public class PetControllerTest {
                         .with(csrf())
                         .flashAttr("pet", pet))
                 .andExpect(status().isOk())
-                .andExpect(view().name("pet/criar"))
+                .andExpect(view().name("pet/form"))
                 .andExpect(model().attributeHasErrors("pet"));
 
         verify(petService, never()).savePet(any(Pet.class));

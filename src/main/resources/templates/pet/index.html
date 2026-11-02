@@ -44,7 +44,7 @@
 
             <!-- Editar: somente ADMIN -->
             <td sec:authorize="hasAuthority('ADMIN')">
-                <a th:href="@{/pet/editar/{id}(id=${pet.id})}" >
+                <a th:href="@{/pet/editar/{id}(id=${pet.id})}" class="btn btn-primary">
                     Editar
                 </a>
             </td>

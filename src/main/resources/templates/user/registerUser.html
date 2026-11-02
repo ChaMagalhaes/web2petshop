@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{fragments/head :: head('Cadastro de Usuário')}"></th:block>
+
+<body>
+
+<th:block th:replace="~{fragments/head :: header()}"></th:block>
+
+<main class="container pt-5">
+    <h3>Cadastro de usuário</h3>
+
+    <form th:action="@{/saveUser}" method="post">
+
+        <label>Nome:</label>
+        <input type="text" name="nome" required />
+
+        <br><br>
+
+        <label>E-mail:</label>
+        <input type="email" name="email" required />
+
+        <br><br>
+
+        <label>Senha:</label>
+        <input type="password" name="password" required />
+
+        <br><br>
+
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}" />
+
+        <button type="submit">Cadastrar</button>
+
+    </form>
+
+    <div th:text="${msg}"></div>
+</main>
+
+<th:block th:replace="~{fragments/footer :: footer()}"></th:block>
+
+</body>
+</html>

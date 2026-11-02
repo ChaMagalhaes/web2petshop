@@ -1,20 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" />
-    <title>Editar Pet</title>
 
-    <link
-            rel="stylesheet"
-            href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-            integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-            crossorigin="anonymous"
-    />
-</head>
+<th:block th:replace="~{fragments/head :: head('Editar Pet')}"></th:block>
 <body>
-
-<div class="container">
-
+<th:block th:replace="~{fragments/head :: header()}"></th:block>
+<div class="container pt-5">
     <h1>Editar Pet</h1>
 
     <form action="#" th:action="@{/pet/salvar}" th:object="${pet}" method="POST">
@@ -98,5 +88,6 @@
         </button>
     </form>
 </div>
+<th:block th:replace="~{fragments/footer :: footer()}"></th:block>
 </body>
 </html>

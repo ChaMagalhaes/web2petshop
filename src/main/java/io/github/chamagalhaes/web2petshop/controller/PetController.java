@@ -3,9 +3,11 @@ package io.github.chamagalhaes.web2petshop.controller;
 import io.github.chamagalhaes.web2petshop.model.Pet;
 import io.github.chamagalhaes.web2petshop.repository.PetRepository;
 import io.github.chamagalhaes.web2petshop.service.PetService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +31,15 @@ public class PetController {
     }
 
     @PostMapping("/pet/salvar")
-    public String salvarPet(@ModelAttribute("pet") Pet pet) {
+    public String salvarPet(@ModelAttribute("pet") @Valid  Pet pet,
+                            BindingResult result,
+                            Model model) {
+
+        if(result.hasErrors()) {
+            model.addAttribute("pet", pet);
+            return "pet/criar";
+        }
+
         petService.savePet(pet);
         return "redirect:/pet";
     }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -30,6 +31,12 @@ public class PetController {
     @PostMapping("/pet/salvar")
     public String salvarPet(@ModelAttribute("pet") Pet pet) {
         petService.savePet(pet);
+        return "redirect:/pet";
+    }
+
+    @GetMapping("/pet/deletar/{id}")
+    public String deletarPet(@PathVariable("id") Long id) {
+        this.petService.deletePetById(id);
         return "redirect:/pet";
     }
 }

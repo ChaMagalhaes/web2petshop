@@ -12,7 +12,8 @@
     />
 </head>
 <body>
-<div class="container">
+<div class="container pt-5">
+    <a th:href="@{/pet/criar}">Cadastrar Pet</a>
     <h1>Listagem de Pet</h1>
     <table class="table table-striped">
         <thead>
@@ -21,6 +22,7 @@
             <th scope="col">Raca</th>
             <th scope="col">Idade</th>
             <th scope="col">Tamanho</th>
+            <th scope="col">Excluir</th>
         </tr>
         </thead>
         <tbody>
@@ -29,6 +31,9 @@
             <td scope="row" th:text="${pet.raca}"></td>
             <td scope="row" th:text="${pet.idade}"></td>
             <td scope="row" th:text="${pet.tamanho}"></td>
+            <td>
+                <a th:href="@{/pet/deletar/{id}(id=${pet.id})}">Deletar</a>
+            </td>
         </tr>
         </tbody>
     </table>

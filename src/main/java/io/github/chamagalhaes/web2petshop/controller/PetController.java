@@ -1,8 +1,7 @@
 package io.github.chamagalhaes.web2petshop.controller;
 
 import io.github.chamagalhaes.web2petshop.model.Pet;
-import io.github.chamagalhaes.web2petshop.repository.PetRepository;
-import io.github.chamagalhaes.web2petshop.service.PetService;
+import io.github.chamagalhaes.web2petshop.service.IPetService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,11 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class PetController {
     @Autowired
-    private PetService petService;
+    private IPetService iPetService;
 
     @GetMapping("/pet")
     public String index(Model model) {
-        model.addAttribute("petsList", petService.getAllPet());
+        model.addAttribute("petsList", iPetService.getAllPet());
         return "pet/index";
     }
 
@@ -40,19 +39,19 @@ public class PetController {
             return "pet/criar";
         }
 
-        petService.savePet(pet);
+        iPetService.savePet(pet);
         return "redirect:/pet";
     }
 
     @GetMapping("/pet/deletar/{id}")
     public String deletarPet(@PathVariable("id") Long id) {
-        this.petService.deletePetById(id);
+        this.iPetService.deletePetById(id);
         return "redirect:/pet";
     }
 
     @GetMapping("/pet/editar/{id}")
     public String editarPet(@PathVariable("id") Long id, Model model) {
-        Pet pet = petService.getPetById(id);
+        Pet pet = iPetService.getPetById(id);
         model.addAttribute("pet", pet);
         return "pet/editar";
     }

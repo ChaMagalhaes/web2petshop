@@ -1,8 +1,8 @@
 package io.github.chamagalhaes.web2petshop.impl;
 
 import io.github.chamagalhaes.web2petshop.model.Pet;
-import io.github.chamagalhaes.web2petshop.repository.PetRepository;
-import io.github.chamagalhaes.web2petshop.service.PetService;
+import io.github.chamagalhaes.web2petshop.repository.IPetRepository;
+import io.github.chamagalhaes.web2petshop.service.IPetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PetServiceImpl implements PetService {
+public class PetServiceImpl implements IPetService {
     @Autowired
-    private PetRepository petRepository;
+    private IPetRepository petRepository;
 
     @Override
     public List<Pet> getAllPet() {

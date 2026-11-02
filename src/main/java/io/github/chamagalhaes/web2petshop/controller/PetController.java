@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class PetController {
-    @Autowired
-    private IPetService iPetService;
+    private final IPetService petService;
+
+    public PetController(IPetService petService) {
+        this.petService = petService;
+    }
 
     @GetMapping("/pet")
     public String index(Model model) {
-        model.addAttribute("petsList", iPetService.getAllPet());
+        model.addAttribute("petsList", petService.getAllPet());
         return "pet/index";
     }
 
@@ -39,19 +42,19 @@ public class PetController {
             return "pet/criar";
         }
 
-        iPetService.savePet(pet);
+        petService.savePet(pet);
         return "redirect:/pet";
     }
 
-    @GetMapping("/pet/deletar/{id}")
-    public String deletarPet(@PathVariable("id") Long id) {
-        this.iPetService.deletePetById(id);
+    @PostMapping("/pet/deletar/{id}")
+    public String deletarPet(@PathVariable Long id) {
+        petService.deletePetById(id);
         return "redirect:/pet";
     }
 
     @GetMapping("/pet/editar/{id}")
     public String editarPet(@PathVariable("id") Long id, Model model) {
-        Pet pet = iPetService.getPetById(id);
+        Pet pet = petService.getPetById(id);
         model.addAttribute("pet", pet);
         return "pet/editar";
     }

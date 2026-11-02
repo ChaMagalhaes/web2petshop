@@ -28,10 +28,14 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
 
     @Override
     public Long saveUser(User user) {
+        user.setRoles(List.of("USER"));
+
         String password = user.getPassword();
         String encodedPassword = passwordEncoder.encode(password);
+
         user.setPassword(encodedPassword);
         user = userRepository.save(user);
+
         return user.getId();
     }
 

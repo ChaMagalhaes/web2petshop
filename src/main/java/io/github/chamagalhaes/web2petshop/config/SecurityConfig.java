@@ -32,6 +32,17 @@ public class SecurityConfig {
                         "/js/**",
                         "/images/**"
                 ).permitAll()
+
+                // Apenas ADMIN pode excluir pets
+                .requestMatchers(
+                        "/pet/criar",
+                        "/pet/salvar",
+                        "/pet/editar/**",
+                        "/pet/atualizar",
+                        "/pet/deletar/**"
+                ).hasAuthority("ADMIN")
+
+                // Demais rotas exigem autenticação
                 .anyRequest().authenticated()
         );
 

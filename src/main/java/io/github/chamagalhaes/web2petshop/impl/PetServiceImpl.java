@@ -11,8 +11,12 @@ import java.util.Optional;
 
 @Service
 public class PetServiceImpl implements IPetService {
-    @Autowired
-    private IPetRepository petRepository;
+
+    private final IPetRepository petRepository;
+
+    public PetServiceImpl(IPetRepository petRepository) {
+        this.petRepository = petRepository;
+    }
 
     @Override
     public List<Pet> getAllPet() {

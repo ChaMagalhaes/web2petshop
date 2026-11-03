@@ -10,8 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "pet")
-@Getter
-@Setter
+@Getter @Setter
 public class Pet {
 
     @Id

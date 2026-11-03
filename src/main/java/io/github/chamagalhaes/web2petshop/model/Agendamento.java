@@ -31,14 +31,13 @@ public class Agendamento {
     @Column(nullable = false)
     private String status;
 
-    @Valid
     @NotEmpty(message = "Adicione pelo menos um serviço")
     @OneToMany(
             mappedBy = "agendamento",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<AgendamentoServico> servicos = new ArrayList<>();
+    private List<@Valid AgendamentoServico> servicos = new ArrayList<>();
 
     @NotNull(message = "É obrigatório selecionar um pet")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

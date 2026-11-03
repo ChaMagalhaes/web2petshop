@@ -30,6 +30,13 @@
            class="text-danger">
         </p>
 
+        <!-- Erro ao salvar o agendamento -->
+        <div th:if="${error}"
+             class="alert alert-danger"
+             role="alert"
+             th:text="${error}">
+        </div>
+
         <!-- Pet -->
         <div class="form-group row">
             <label for="pet" class="col-sm-2 col-form-label">

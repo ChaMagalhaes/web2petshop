@@ -4,6 +4,7 @@ import io.github.chamagalhaes.web2petshop.model.Agendamento;
 import io.github.chamagalhaes.web2petshop.service.IAgendamentoService;
 import io.github.chamagalhaes.web2petshop.service.IPetService;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -53,9 +54,17 @@ public class AgendamentoController {
             return "agendamento/form";
         }
 
-        agendamentoService.saveAgendamento(agendamento);
+        try{
 
-        return "redirect:/agendamento";
+            agendamentoService.saveAgendamento(agendamento);
+
+            return  "redirect:/agendamento";
+        }catch(IllegalArgumentException | EntityNotFoundException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("petsList", petService.getAllPet());
+
+            return "agendamento/form";
+        }
     }
 
     @PostMapping("/deletar/{id}")

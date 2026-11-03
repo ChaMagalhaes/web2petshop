@@ -1,4 +1,3 @@
-
 package io.github.chamagalhaes.web2petshop.integration;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;

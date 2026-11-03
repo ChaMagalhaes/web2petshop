@@ -1,5 +1,6 @@
 package io.github.chamagalhaes.web2petshop.config;
 
+import io.github.chamagalhaes.web2petshop.service.IAgendamentoService;
 import io.github.chamagalhaes.web2petshop.service.IPetService;
 
 import org.mockito.Mockito;
@@ -30,5 +31,11 @@ public class TestConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
+    @Primary
+    public IAgendamentoService agendamentoService() {
+        return Mockito.mock(IAgendamentoService.class);
     }
 }

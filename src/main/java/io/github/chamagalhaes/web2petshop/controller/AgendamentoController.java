@@ -18,36 +18,34 @@ import org.springframework.web.server.ResponseStatusException;
 public class AgendamentoController {
 
     private final IAgendamentoService agendamentoService;
+
     private final IPetService petService;
 
-    public AgendamentoController(
-            IAgendamentoService agendamentoService,
-            IPetService petService) {
+    public AgendamentoController(IAgendamentoService agendamentoService, IPetService petService) {
+
         this.agendamentoService = agendamentoService;
+
         this.petService = petService;
     }
 
     @GetMapping
-    public String index(Model model) {
-        model.addAttribute("agendamentosList",
-                agendamentoService.getAllAgendamentos());
+    public String index(Model model) {model.addAttribute("agendamentosList", agendamentoService.getAllAgendamentos());
 
         return "agendamento/index";
     }
 
     @GetMapping("/criar")
     public String criarAgendamento(Model model) {
+
         model.addAttribute("agendamento", new Agendamento());
+
         model.addAttribute("petsList", petService.getAllPet());
 
         return "agendamento/form";
     }
 
     @PostMapping("/salvar")
-    public String salvarAgendamento(
-            @ModelAttribute("agendamento") @Valid Agendamento agendamento,
-            BindingResult result,
-            Model model) {
+    public String salvarAgendamento(@ModelAttribute("agendamento") @Valid Agendamento agendamento, BindingResult result, Model model) {
 
         if (result.hasErrors()) {
             model.addAttribute("petsList", petService.getAllPet());
@@ -62,6 +60,7 @@ public class AgendamentoController {
 
     @PostMapping("/deletar/{id}")
     public String deletarAgendamento(@PathVariable Long id) {
+
         agendamentoService.deleteAgendamentoById(id);
 
         return "redirect:/agendamento";
@@ -69,6 +68,7 @@ public class AgendamentoController {
 
     @GetMapping("/editar/{id}")
     public String editarAgendamento(@PathVariable Long id, Model model) {
+
         Agendamento agendamento = agendamentoService.getAgendamentoById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
@@ -76,6 +76,7 @@ public class AgendamentoController {
                 ));
 
         model.addAttribute("agendamento", agendamento);
+
         model.addAttribute("petsList", petService.getAllPet());
 
         return "agendamento/form";

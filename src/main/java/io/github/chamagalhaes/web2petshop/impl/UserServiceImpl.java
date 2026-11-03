@@ -3,6 +3,7 @@ package io.github.chamagalhaes.web2petshop.impl;
 import io.github.chamagalhaes.web2petshop.model.User;
 import io.github.chamagalhaes.web2petshop.repository.IUserRepository;
 import io.github.chamagalhaes.web2petshop.service.IUserService;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,46 +26,45 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public UserServiceImpl(IUserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public Long saveUser(User user) {
+
         user.setRoles(List.of("USER"));
 
         String password = user.getPassword();
+
         String encodedPassword = passwordEncoder.encode(password);
 
         user.setPassword(encodedPassword);
+
         user = userRepository.save(user);
 
         return user.getId();
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> opt = userRepository.findUserByEmail(email);
+    @NonNull
+    public UserDetails loadUserByUsername(@NonNull String email) throws UsernameNotFoundException {
 
-        org.springframework.security.core.userdetails.User springUser = null;
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(email));
 
-        if(opt.isEmpty()) {
-            throw new UsernameNotFoundException(email);
-        }else {
-            User user = opt.get();
-            List<String> roles = user.getRoles();
-            Set<GrantedAuthority> ga = new HashSet<>();
-            for(String role : roles) {
-                ga.add(new SimpleGrantedAuthority(role));
-            }
+        Set<GrantedAuthority> authorities = new HashSet<>();
 
-            springUser = new org.springframework.security.core.userdetails.User(
-                    email,
-                    user.getPassword(),
-                    ga
-            );
+        for (String role : user.getRoles()) {
+
+            authorities.add(new SimpleGrantedAuthority(role));
         }
 
-        return springUser;
+        return new org.springframework.security.core.userdetails.User(
+                email,
+                user.getPassword(),
+                authorities
+        );
     }
 }

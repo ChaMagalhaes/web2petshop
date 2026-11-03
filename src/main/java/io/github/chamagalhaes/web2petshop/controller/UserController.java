@@ -14,30 +14,38 @@ public class UserController {
     private final IUserService userService;
 
     public UserController(IUserService userService) {
+
         this.userService = userService;
     }
 
     @GetMapping("/register")
     public String register() {
+
         return "user/registerUser";
     }
 
     @PostMapping("/saveUser")
     public String saveUser(@ModelAttribute  User user, Model model) {
+
         Long id = userService.saveUser(user);
+
         String message = "Usuário '" + id + "' cadastrado com sucesso!";
+
         model.addAttribute("msg", message);
+
         return "user/registerUser";
     }
 
     @GetMapping("/login")
     public String login() {
+
         return "user/login";
     }
 
 
     @GetMapping("/accessDenied")
     public String getAccessDeniedPage() {
+
         return "user/accessDeniedPage";
     }
 }

@@ -5,8 +5,14 @@ import io.github.chamagalhaes.web2petshop.model.Pet;
 import java.util.List;
 
 public interface IPetService {
+
     List<Pet> getAllPet();
+
     void savePet(Pet pet);
+
     Pet getPetById(long id);
+
+    Pet updatePet(long id, Pet petDetails);
+
     void deletePetById(long id);
 }

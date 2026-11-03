@@ -16,34 +16,42 @@ public class AgendamentoServiceImpl implements IAgendamentoService {
     private final IAgendamentoRepository agendamentoRepository;
 
     public AgendamentoServiceImpl(IAgendamentoRepository agendamentoRepository) {
+
         this.agendamentoRepository = agendamentoRepository;
     }
 
     @Override
     public List<Agendamento> getAllAgendamentos() {
+
         return agendamentoRepository.findAll();
     }
 
     @Override
     public Optional<Agendamento> getAgendamentoById(Long id) {
+
         return agendamentoRepository.findById(id);
     }
 
     @Override
     @Transactional
     public void saveAgendamento(Agendamento agendamento) {
+
         if (agendamento.getServicos() != null) {
+
             for (AgendamentoServico servico : agendamento.getServicos()) {
+
                 servico.setAgendamento(agendamento);
             }
         }
 
         agendamento.calculateTotal();
+
         agendamentoRepository.save(agendamento);
     }
 
     @Override
     public void deleteAgendamentoById(Long id) {
+
         agendamentoRepository.deleteById(id);
     }
 }

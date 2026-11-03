@@ -92,7 +92,40 @@
                         </a>
                     </div>
                 </li>
+
+                <!-- Agendamentos -->
+                <li class="nav-item dropdown">
+
+                    <a
+                            class="nav-link dropdown-toggle"
+                            th:href="@{/agendamento}"
+                            id="navbarDropdownAgendamentos"
+                            role="button"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                    >
+                        Agendamentos
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownAgendamentos">
+
+                        <!-- USER e ADMIN -->
+                        <a class="dropdown-item" th:href="@{/agendamento}">
+                            Listar
+                        </a>
+
+                        <!-- Somente ADMIN -->
+                        <a sec:authorize="hasAuthority('ADMIN')"
+                           class="dropdown-item"
+                           th:href="@{/agendamento/criar}">
+                            Cadastrar
+                        </a>
+
+                    </div>
+                </li>
             </ul>
+
             <!-- Logout: usuários autenticados -->
             <form
                     sec:authorize="isAuthenticated()"

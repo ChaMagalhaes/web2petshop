@@ -112,7 +112,7 @@ public class PetControllerTest {
         mockMvc.perform(get("/pet"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
-                        not(containsString("Cadastrar Pet"))
+                        not(containsString("Cadastrar Novo Pet"))
                 ));
     }
 
@@ -127,7 +127,7 @@ public class PetControllerTest {
         mockMvc.perform(get("/pet"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
-                        containsString("Cadastrar Pet")
+                        containsString("Cadastrar Novo Pet")
                 ));
     }
 

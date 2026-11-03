@@ -24,22 +24,31 @@ public class SecurityConfig {
     ) throws Exception {
 
         http.authorizeHttpRequests(requests -> requests
+                // Acesso público
                 .requestMatchers(
                         "/register",
                         "/saveUser",
+                        "/login",
                         "/accessDenied",
                         "/css/**",
                         "/js/**",
                         "/images/**"
                 ).permitAll()
 
-                // Apenas ADMIN pode excluir pets
+                // Operações administrativas de Pets
                 .requestMatchers(
                         "/pet/criar",
                         "/pet/salvar",
                         "/pet/editar/**",
-                        "/pet/atualizar",
                         "/pet/deletar/**"
+                ).hasAuthority("ADMIN")
+
+                // Operações administrativas de Agendamentos
+                .requestMatchers(
+                        "/agendamento/criar",
+                        "/agendamento/salvar",
+                        "/agendamento/editar/**",
+                        "/agendamento/deletar/**"
                 ).hasAuthority("ADMIN")
 
                 // Demais rotas exigem autenticação
@@ -47,6 +56,7 @@ public class SecurityConfig {
         );
 
         http.formLogin(login -> login
+                .loginPage("/login")
                 .defaultSuccessUrl("/pet", true)
                 .permitAll()
         );

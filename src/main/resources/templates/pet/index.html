@@ -1,68 +1,88 @@
+
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+<html lang="pt-br"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<th:block th:replace="~{fragments/head :: head('Listar Pet')}"></th:block>
-<body>
-<th:block th:replace="~{fragments/head :: header()}"></th:block>
-<div class="container pt-5">
-    <h1>Listagem de Pet</h1>
+<th:block th:replace="~{fragments/head :: head('Listar Pets')}"></th:block>
 
+<body>
+
+<th:block th:replace="~{fragments/head :: header()}"></th:block>
+
+<div class="container mt-4">
+
+    <!-- Cabeçalho -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Lista de Pets</h1>
+
+        <a sec:authorize="hasAuthority('ADMIN')"
+           th:href="@{/pet/criar}"
+           class="btn btn-primary">
+            Cadastrar Novo Pet
+        </a>
+    </div>
+
+    <!-- Tabela -->
     <table class="table table-striped">
+
         <thead>
         <tr>
             <th scope="col">Nome</th>
-            <th scope="col">Raca</th>
+            <th scope="col">Raça</th>
             <th scope="col">Idade</th>
             <th scope="col">Tamanho</th>
-
-            <th scope="col" sec:authorize="hasAuthority('ADMIN')">Excluir</th>
-            <th scope="col" sec:authorize="hasAuthority('ADMIN')">Editar</th>
+            <th scope="col" sec:authorize="hasAuthority('ADMIN')">Ações</th>
         </tr>
         </thead>
 
         <tbody>
 
-        <tr th:each="pet : ${petsList}">
-
-            <td scope="row" th:text="${pet.nome}"></td>
-            <td scope="row" th:text="${pet.raca}"></td>
-            <td scope="row" th:text="${pet.idade}"></td>
-            <td scope="row" th:text="${pet.tamanho}"></td>
-
-            <!-- Excluir: somente ADMIN -->
-            <td sec:authorize="hasAuthority('ADMIN')">
-
-                <form th:action="@{/pet/deletar/{id}(id=${pet.id})}"
-                      method="post">
-
-                    <button type="submit" class="btn btn-danger">
-                        Excluir
-                    </button>
-                </form>
-            </td>
-
-            <!-- Editar: somente ADMIN -->
-            <td sec:authorize="hasAuthority('ADMIN')">
-                <a th:href="@{/pet/editar/{id}(id=${pet.id})}" class="btn btn-primary">
-                    Editar
-                </a>
+        <!-- Mensagem quando não houver pets -->
+        <tr th:if="${petsList.isEmpty()}">
+            <td colspan="5" class="text-center">
+                Nenhum pet encontrado.
             </td>
         </tr>
+
+        <!-- Listagem -->
+        <tr th:each="pet : ${petsList}">
+
+            <td th:text="${pet.nome}"></td>
+            <td th:text="${pet.raca}"></td>
+            <td th:text="${pet.idade}"></td>
+            <td th:text="${pet.tamanho}"></td>
+
+            <!-- Ações: somente ADMIN -->
+            <td sec:authorize="hasAuthority('ADMIN')">
+                <div class="d-flex">
+
+                    <a th:href="@{/pet/editar/{id}(id=${pet.id})}"
+                       class="btn btn-primary btn-sm mr-2">
+                        Editar
+                    </a>
+
+                    <form th:action="@{/pet/deletar/{id}(id=${pet.id})}"
+                          method="post"
+                          onsubmit="return confirm('Tem certeza que deseja excluir este pet?');">
+
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            Excluir
+                        </button>
+
+                    </form>
+
+                </div>
+            </td>
+
+        </tr>
+
         </tbody>
     </table>
 
-    <!-- Cadastrar: somente ADMIN -->
-    <div class="row">
-
-        <a sec:authorize="hasAuthority('ADMIN')"
-           th:href="@{/pet/criar}"
-           class="btn btn-primary">
-            Cadastrar Pet
-        </a>
-    </div>
 </div>
 
 <th:block th:replace="~{fragments/footer :: footer()}"></th:block>
+
 </body>
 </html>

@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{fragments/head :: head(${agendamento.id == null} ? 'Cadastrar Agendamento' : 'Editar Agendamento')}"></th:block>
+
+<body>
+
+<th:block th:replace="~{fragments/head :: header()}"></th:block>
+
+<div class="container mt-4">
+
+    <!-- Cabeçalho -->
+    <div class="mb-3">
+        <h1 th:text="${agendamento.id == null ? 'Cadastrar Agendamento' : 'Editar Agendamento #' + agendamento.id}">
+            Cadastrar Agendamento
+        </h1>
+    </div>
+
+    <!-- Formulário -->
+    <form th:action="@{/agendamento/salvar}"
+          th:object="${agendamento}"
+          method="post">
+
+        <input type="hidden" th:field="*{id}">
+
+        <!-- Erros gerais -->
+        <p th:if="${#fields.hasErrors('global')}"
+           th:errors="*{global}"
+           class="text-danger">
+        </p>
+
+        <!-- Pet -->
+        <div class="form-group row">
+            <label for="pet" class="col-sm-2 col-form-label">
+                Pet:
+            </label>
+
+            <div class="col-sm-10">
+                <select class="form-control"
+                        th:field="*{pet.id}"
+                        id="pet">
+
+                    <option value="">Selecione um pet</option>
+
+                    <option th:each="p : ${petsList}"
+                            th:value="${p.id}"
+                            th:text="${p.nome}">
+                    </option>
+
+                </select>
+
+                <small class="text-danger"
+                       th:errors="*{pet}">
+                </small>
+            </div>
+        </div>
+
+        <!-- Data e hora -->
+        <div class="form-group row">
+            <label for="dataHora" class="col-sm-2 col-form-label">
+                Data e hora:
+            </label>
+
+            <div class="col-sm-10">
+                <input type="datetime-local"
+                       class="form-control"
+                       th:field="*{dataHora}"
+                       id="dataHora">
+
+                <small class="text-danger"
+                       th:errors="*{dataHora}">
+                </small>
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div class="form-group row">
+            <label for="status" class="col-sm-2 col-form-label">
+                Status:
+            </label>
+
+            <div class="col-sm-10">
+                <select class="form-control"
+                        th:field="*{status}"
+                        id="status">
+
+                    <option value="">Selecione o status</option>
+                    <option value="PENDENTE">Pendente</option>
+                    <option value="CONFIRMADO">Confirmado</option>
+                    <option value="CONCLUIDO">Concluído</option>
+                    <option value="CANCELADO">Cancelado</option>
+
+                </select>
+
+                <small class="text-danger"
+                       th:errors="*{status}">
+                </small>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Serviços -->
+        <h5>Serviços do agendamento</h5>
+
+        <div id="servicos-container">
+
+            <div th:each="servico, iter : *{servicos}"
+                 class="form-row servico-row">
+
+                <input type="hidden"
+                       th:field="*{servicos[__${iter.index}__].id}">
+
+                <div class="form-group col-md-6">
+                    <label>Nome do serviço</label>
+
+                    <input type="text"
+                           class="form-control"
+                           th:field="*{servicos[__${iter.index}__].nome}">
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label>Valor</label>
+
+                    <input type="number"
+                           min="0"
+                           step="0.01"
+                           class="form-control"
+                           th:field="*{servicos[__${iter.index}__].valor}">
+                </div>
+
+                <div class="form-group col-md-2 d-flex align-items-end">
+                    <button type="button"
+                            class="btn btn-danger remove-servico">
+                        Remover
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <!-- Botões -->
+        <div class="mb-3">
+
+            <button type="button"
+                    id="add-servico"
+                    class="btn btn-secondary mr-2">
+                Adicionar serviço
+            </button>
+
+            <button type="submit"
+                    class="btn btn-primary mr-2">
+                Salvar
+            </button>
+
+            <a th:href="@{/agendamento}"
+               class="btn btn-outline-secondary">
+                Voltar
+            </a>
+
+        </div>
+
+        <!-- Modelo de uma nova linha -->
+        <div id="servico-template" style="display: none">
+
+            <div class="form-row servico-row">
+
+                <div class="form-group col-md-6">
+                    <label>Nome do serviço</label>
+
+                    <input type="text"
+                           class="form-control nome-servico">
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label>Valor</label>
+
+                    <input type="number"
+                           min="0"
+                           step="0.01"
+                           class="form-control valor-servico">
+                </div>
+
+                <div class="form-group col-md-2 d-flex align-items-end">
+                    <button type="button"
+                            class="btn btn-danger remove-servico">
+                        Remover
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+<th:block th:replace="~{fragments/footer :: footer()}"></th:block>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const container = document.getElementById("servicos-container");
+        const template = document.getElementById("servico-template").innerHTML;
+
+        let index = container.children.length;
+
+        // Adicionar serviço
+        document.getElementById("add-servico")
+            .addEventListener("click", function () {
+
+                const wrapper = document.createElement("div");
+                wrapper.innerHTML = template;
+
+                const novaLinha = wrapper.firstElementChild;
+
+                novaLinha.querySelector(".nome-servico").name =
+                    `servicos[${index}].nome`;
+
+                novaLinha.querySelector(".valor-servico").name =
+                    `servicos[${index}].valor`;
+
+                container.appendChild(novaLinha);
+
+                index++;
+            });
+
+        // Remover serviço
+        container.addEventListener("click", function (event) {
+
+            if (event.target.classList.contains("remove-servico")) {
+
+                event.target.closest(".servico-row").remove();
+
+                reindexarServicos();
+            }
+        });
+
+        // Reindexar os campos após remoção
+        function reindexarServicos() {
+
+            const linhas = container.querySelectorAll(".servico-row");
+
+            linhas.forEach((linha, i) => {
+
+                const nome = linha.querySelector(
+                    'input[name*=".nome"]'
+                );
+
+                const valor = linha.querySelector(
+                    'input[name*=".valor"]'
+                );
+
+                const id = linha.querySelector(
+                    'input[name*=".id"]'
+                );
+
+                if (nome) {
+                    nome.name = `servicos[${i}].nome`;
+                }
+
+                if (valor) {
+                    valor.name = `servicos[${i}].valor`;
+                }
+
+                if (id) {
+                    id.name = `servicos[${i}].id`;
+                }
+            });
+
+            index = linhas.length;
+        }
+    });
+</script>
+
+</body>
+</html>

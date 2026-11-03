@@ -3,7 +3,6 @@ package io.github.chamagalhaes.web2petshop.controller;
 import io.github.chamagalhaes.web2petshop.model.Pet;
 import io.github.chamagalhaes.web2petshop.service.IPetService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

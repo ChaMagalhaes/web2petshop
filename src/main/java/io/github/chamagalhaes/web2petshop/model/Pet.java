@@ -5,9 +5,13 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "pet")
-@Getter @Setter
+@Getter
+@Setter
 public class Pet {
 
     @Id
@@ -38,4 +42,12 @@ public class Pet {
     )
     @Column(name = "tamanho", nullable = false)
     private String tamanho;
+
+    @OneToMany(mappedBy = "pet")
+    private List<Agendamento> agendamentos = new ArrayList<>();
+
+    public void addAgendamento(Agendamento agendamento) {
+        agendamentos.add(agendamento);
+        agendamento.setPet(this);
+    }
 }

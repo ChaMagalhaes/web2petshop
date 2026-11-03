@@ -2,7 +2,6 @@ package io.github.chamagalhaes.web2petshop.controller;
 
 import io.github.chamagalhaes.web2petshop.model.User;
 import io.github.chamagalhaes.web2petshop.service.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

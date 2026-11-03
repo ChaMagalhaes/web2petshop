@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*") // Permite acesso do React
 @RestController
 @RequestMapping("api/pet")
 public class PetRestController {

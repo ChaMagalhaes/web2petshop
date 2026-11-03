@@ -6,12 +6,10 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/pet")
 public class PetController {
 
     private final IPetService petService;
@@ -20,19 +18,19 @@ public class PetController {
         this.petService = petService;
     }
 
-    @GetMapping("/pet")
+    @GetMapping
     public String index(Model model) {
         model.addAttribute("petsList", petService.getAllPet());
         return "pet/index";
     }
 
-    @GetMapping("/pet/criar")
+    @GetMapping("/criar")
     public String criarPet(Model model) {
         model.addAttribute("pet", new Pet());
         return "pet/form";
     }
 
-    @PostMapping("/pet/salvar")
+    @PostMapping("/salvar")
     public String salvarPet(@ModelAttribute("pet") @Valid  Pet pet,
                             BindingResult result,
                             Model model) {
@@ -46,13 +44,13 @@ public class PetController {
         return "redirect:/pet";
     }
 
-    @PostMapping("/pet/deletar/{id}")
+    @PostMapping("/deletar/{id}")
     public String deletarPet(@PathVariable Long id) {
         petService.deletePetById(id);
         return "redirect:/pet";
     }
 
-    @GetMapping("/pet/editar/{id}")
+    @GetMapping("/editar/{id}")
     public String editarPet(@PathVariable("id") Long id, Model model) {
         Pet pet = petService.getPetById(id);
         model.addAttribute("pet", pet);
